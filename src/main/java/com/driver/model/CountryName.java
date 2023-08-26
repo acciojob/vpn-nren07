@@ -1,5 +1,9 @@
 package com.driver.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+
 public enum CountryName {
     IND("001"),
     USA("002"),

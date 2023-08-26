@@ -3,23 +3,19 @@ package com.driver.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table
-public class Country {
+public class Connection {
     @Id
     private Integer id;
-    private CountryName countryName;
-    private String code;
 
     @ManyToOne
     @JoinColumn
     @JsonIgnore
     private ServiceProvider serviceProvider;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn
     @JsonIgnore
     private User user;

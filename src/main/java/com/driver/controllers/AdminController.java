@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
+
 public class AdminController {
     @Autowired
     AdminServiceImpl adminService;
@@ -23,16 +24,24 @@ public class AdminController {
     @PostMapping("/addProvider")
     public ResponseEntity<Void> addServiceProvider(@RequestParam int adminId, @RequestParam String providerName){
         //add a serviceProvider under the admin and return updated admin
-        Admin admin = adminService.addServiceProvider(adminId, providerName);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            Admin admin = adminService.addServiceProvider(adminId, providerName);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/addCountry")
-    public ResponseEntity<Void> addCountry(@RequestParam int serviceProviderId, @RequestParam String countryName) throws Exception{
+    public ResponseEntity addCountry(@RequestParam int serviceProviderId, @RequestParam String countryName) throws Exception{
         //add a country under the serviceProvider and return respective service provider
         //country name would be a 3-character string out of ind, aus, usa, chi, jpn. Each character can be in uppercase or lowercase. You should create a new Country object based on the given country name and add it to the country list of the service provider. Note that the user attribute of the country in this case would be null.
         //In case country name is not amongst the above mentioned strings, throw "Country not found" exception
-        ServiceProvider serviceProvider = adminService.addCountry(serviceProviderId, countryName);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            ServiceProvider serviceProvider = adminService.addCountry(serviceProviderId, countryName);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

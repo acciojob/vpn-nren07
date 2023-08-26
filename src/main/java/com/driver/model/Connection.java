@@ -8,7 +8,8 @@ import javax.persistence.*;
 @Table
 public class Connection {
     @Id
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @ManyToOne
     @JoinColumn
@@ -19,4 +20,37 @@ public class Connection {
     @JoinColumn
     @JsonIgnore
     private User user;
+
+    public Connection() {
+    }
+
+    public Connection(Integer id, ServiceProvider serviceProvider, User user) {
+        this.id = id;
+        this.serviceProvider = serviceProvider;
+        this.user = user;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public ServiceProvider getServiceProvider() {
+        return serviceProvider;
+    }
+
+    public void setServiceProvider(ServiceProvider serviceProvider) {
+        this.serviceProvider = serviceProvider;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

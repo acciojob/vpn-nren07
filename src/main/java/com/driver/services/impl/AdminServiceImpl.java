@@ -6,6 +6,8 @@ import com.driver.repository.CountryRepository;
 import com.driver.repository.ServiceProviderRepository;
 import com.driver.services.AdminService;
 import com.fasterxml.jackson.databind.util.EnumValues;
+import com.google.common.base.Enums;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,15 +56,16 @@ public class AdminServiceImpl implements AdminService{
 //        In case country name is not amongst the above mentioned strings, throw "Country not found" exception
 
         if(!serviceProviderRepository1.existsById(serviceProviderId)) throw new Exception("Service provider is not valid");
-
+        if(!Enums.getIfPresent(CountryName.class, countryName.toUpperCase()).isPresent()) {
+            throw new Exception("Country not found");
+        }
         Country country=new Country();
         country.setCountryName(CountryName.valueOf(countryName.toUpperCase()));
 
         ServiceProvider serviceProvider=serviceProviderRepository1.findById(serviceProviderId).get();
-
-        serviceProvider.getCountryList().add(country);
         country.setServiceProvider(serviceProvider);
-
+        Country countryById=countryRepository1.save(country);
+        serviceProvider.getCountryList().add(countryById);
         return serviceProviderRepository1.save(serviceProvider);
 
     }

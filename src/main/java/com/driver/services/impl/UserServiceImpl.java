@@ -28,10 +28,10 @@ public class UserServiceImpl implements UserService {
         country.enrich(countryName);
         //set fk variable
         country.setUser(user);
-        user.setCountry(country);
+        user.setOriginalCountry(country);
 
         user=userRepository3.save(user); //this is for user id assign
-        user.setOriginalIp(new String(user.getCountry().getCode()+user.getId()));
+        user.setOriginalIp(new String(user.getOriginalCountry().getCode()+user.getId()));
 
         //bidirectional mapping here
         userRepository3.save(user);

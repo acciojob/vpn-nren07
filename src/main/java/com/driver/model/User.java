@@ -1,8 +1,5 @@
 package com.driver.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.boot.test.autoconfigure.data.cassandra.DataCassandraTest;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +73,7 @@ public class User {
         this.maskedIp = maskedIp;
     }
 
-    public boolean isConnected() {
+    public boolean getConnected() {
         return connected;
     }
 
@@ -92,11 +89,11 @@ public class User {
         this.serviceProviderList = serviceProviderList;
     }
 
-    public Country getCountry() {
+    public Country getOriginalCountry() {
         return country;
     }
 
-    public void setCountry(Country country) {
+    public void setOriginalCountry(Country country) {
         this.country = country;
     }
 

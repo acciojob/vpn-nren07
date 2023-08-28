@@ -5,7 +5,6 @@ import com.driver.repository.ConnectionRepository;
 import com.driver.repository.ServiceProviderRepository;
 import com.driver.repository.UserRepository;
 import com.driver.services.ConnectionService;
-import com.sun.org.apache.xpath.internal.functions.WrongNumberArgsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +22,12 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     public User connect(int userId, String countryName) throws Exception {
         User user = userRepository2.findById(userId).get();
-        if (user.isConnected()) throw new Exception("Already connected");
+        if (user.getConnected()) throw new Exception("Already connected");
 
         Country givenCountry = new Country();
         givenCountry.enrich(countryName);
 
-        if (user.getCountry().getCountryName().equals(givenCountry.getCountryName())) {
+        if (user.getOriginalCountry().getCountryName().equals(givenCountry.getCountryName())) {
             return user;
         }
         List<ServiceProvider> serviceProviders = user.getServiceProviderList();
@@ -74,7 +73,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     public User disconnect(int userId) throws Exception{ //
         User user =userRepository2.findById(userId).get();
 
-        if(!user.isConnected()){
+        if(!user.getConnected()){
             throw new Exception("Already Disconnected");
         }
         user.setConnected(false);
@@ -105,7 +104,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         else if(maskedCode.equals("004")) receiverCountryName=CountryName.CHI;
         else if(maskedCode.equals("005")) receiverCountryName=CountryName.JPN;
         else {
-            receiverCountryName=receiver.getCountry().getCountryName();
+            receiverCountryName=receiver.getOriginalCountry().getCountryName();
         }
 
         User user =null;

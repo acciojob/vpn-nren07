@@ -13,12 +13,10 @@ public class Connection {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
     private ServiceProvider serviceProvider;
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
     private User user;
 
     public Connection() {

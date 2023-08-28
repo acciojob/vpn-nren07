@@ -6,6 +6,7 @@ import com.driver.repository.UserRepository;
 import com.driver.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -22,19 +23,41 @@ public class UserServiceImpl implements UserService {
         User user=new User();
         user.setUsername(username);
         user.setPassword(password);
-        user=userRepository3.save(user);
-        Integer countryId=countryRepository3.findByName(countryName);
-        if(countryId==null) throw new Exception("Country not found");
-        Country country=countryRepository3.findById(countryId).get();
-
-        user.setOriginalIp(country.getCode()+user.getId());
+        user.setConnected(false);
+        Country country=new Country();
+        country.enrich(countryName);
+        //set fk variable
         country.setUser(user);
+        user.setCountry(country);
+
+        user=userRepository3.save(user); //this is for user id assign
+        user.setOriginalIp(new String(user.getCountry().getCode()+user.getId()));
+
+        //bidirectional mapping here
         userRepository3.save(user);
         return user;
     }
 
     @Override
-    public User subscribe(Integer userId, Integer serviceProviderId) {
-        return null;
+    public User subscribe(Integer userId, Integer serviceProviderId) throws Exception {
+        if(!userRepository3.existsById(userId)) throw new Exception("user not found");
+        if(!serviceProviderRepository3.existsById(serviceProviderId)) throw new Exception("serviceProvider is invalid");
+        //all validation check
+        //connect fk
+        User user=userRepository3.findById(userId).get();
+        ServiceProvider serviceProvider=serviceProviderRepository3.findById(serviceProviderId).get();
+
+        List<ServiceProvider>serviceProviderList=user.getServiceProviderList();
+        List<User>userList=serviceProvider.getUsers();
+        //fk set
+        serviceProviderList.add(serviceProvider);
+        user.setServiceProviderList(serviceProviderList);
+
+        userList.add(user);
+        serviceProvider.setUsers(userList);
+
+        //bidirectional mapping
+        serviceProviderRepository3.save(serviceProvider);
+        return user;
     }
 }

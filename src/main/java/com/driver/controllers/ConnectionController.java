@@ -21,16 +21,25 @@ public class ConnectionController {
         //3. Else, the user should be subscribed under a serviceProvider having option to connect to the given country.
             //If the connection can not be made (As user does not have a serviceProvider or serviceProvider does not have given country, throw "Unable to connect" exception.
             //Else, establish the connection where the maskedIp is "updatedCountryCode.serviceProviderId.userId" and return the updated user. If multiple service providers allow you to connect to the country, use the service provider having smallest id.
-        User user = connectionService.connect(userId, countryName);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            User user = connectionService.connect(userId, countryName);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/disconnect")
     public ResponseEntity<Void> disconnect(@RequestParam int userId) throws Exception{
         //If the given user was not connected to a vpn, throw "Already disconnected" exception.
         //Else, disconnect from vpn, make masked Ip as null, update relevant attributes and return updated user.
-        User user = connectionService.disconnect(userId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            User user = connectionService.disconnect(userId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/communicate")
@@ -42,7 +51,11 @@ public class ConnectionController {
         //The sender is initially not connected to any vpn. If the sender's original country does not match receiver's current country, we need to connect the sender to a suitable vpn. If there are multiple options, connect using the service provider having smallest id
         //If the sender's original country matches receiver's current country, we do not need to do anything as they can communicate. Return the sender as it is.
         //If communication can not be established due to any reason, throw "Cannot establish communication" exception
-        User updatedSender = connectionService.communicate(senderId, receiverId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            User updatedSender = connectionService.communicate(senderId, receiverId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static java.lang.Character.toUpperCase;
 
@@ -42,10 +43,12 @@ public class AdminServiceImpl implements AdminService{
         ServiceProvider serviceProvider=new ServiceProvider();
         serviceProvider.setName(providerName);
         //set fk valiables
+        List<ServiceProvider> list=admin.getServiceProviders();
+        list.add(serviceProvider);
+        admin.setServiceProviders(list);
         serviceProvider.setAdmin(admin);
-        serviceProvider=serviceProviderRepository1.save(serviceProvider);
+
         //bidirectional mapping
-        admin.getServiceProviders().add(serviceProvider);
         return adminRepository1.save(admin);
     }
 
@@ -55,18 +58,18 @@ public class AdminServiceImpl implements AdminService{
 //        country name would be a 3-character string out of ind, aus, usa, chi, jpn. Each character can be in uppercase or lowercase. You should create a new Country object based on the given country name and add it to the country list of the service provider. Note that the user attribute of the country in this case would be null.
 //        In case country name is not amongst the above mentioned strings, throw "Country not found" exception
 
-        if(!serviceProviderRepository1.existsById(serviceProviderId)) throw new Exception("Service provider is not valid");
-        if(!Enums.getIfPresent(CountryName.class, countryName.toUpperCase()).isPresent()) {
-            throw new Exception("Country not found");
-        }
-        Country country=new Country();
-        country.setCountryName(CountryName.valueOf(countryName.toUpperCase()));
-
         ServiceProvider serviceProvider=serviceProviderRepository1.findById(serviceProviderId).get();
+        List<Country>list=serviceProvider.getCountryList();
+        Country country=new Country();
+        country.enrich(countryName);
+        //set fk variable
         country.setServiceProvider(serviceProvider);
-        Country countryById=countryRepository1.save(country);
-        serviceProvider.getCountryList().add(countryById);
-        return serviceProviderRepository1.save(serviceProvider);
+        list.add(country);
+        serviceProvider.setCountryList(list);
+
+        //bi_directional mapping
+        serviceProvider=serviceProviderRepository1.save(serviceProvider);
+        return serviceProvider;
 
     }
 }

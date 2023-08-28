@@ -12,18 +12,16 @@ public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Enumerated(value = EnumType.STRING)
+//    @Enumerated(value = EnumType.STRING)
     private CountryName countryName;
     private String code;
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
     private ServiceProvider serviceProvider;
 
     @OneToOne
     @JoinColumn
-    @JsonIgnore
     private User user;
 
     public Country() {
@@ -75,5 +73,33 @@ public class Country {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void enrich(String countryName) throws Exception{
+        String updatedName=countryName.toUpperCase();
+
+        if(updatedName.equals("IND")){
+            this.setCountryName(CountryName.IND);
+            this.setCode(CountryName.IND.toCode());
+        }
+        else if(updatedName.equals("USA")){
+            this.setCountryName(CountryName.USA);
+            this.setCode(CountryName.USA.toCode());
+        }
+        else if(updatedName.equals("AUS")){
+            this.setCountryName(CountryName.AUS);
+            this.setCode(CountryName.AUS.toCode());
+        }
+        else if(updatedName.equals("CHI")){
+            this.setCountryName(CountryName.CHI);
+            this.setCode(CountryName.CHI.toCode());
+        }
+        else if(updatedName.equals("JPN")){
+            this.setCountryName(CountryName.JPN);
+            this.setCode(CountryName.JPN.toCode());
+        }
+        else {
+            throw  new Exception("Country not found");
+        }
     }
 }

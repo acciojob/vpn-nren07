@@ -17,15 +17,17 @@ public class User {
     private String password;
     private String originalIp;
     private String maskedIp;
-    private boolean connected=false;
+    private boolean connected;
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @ManyToMany
     @JoinColumn
-    @JsonIgnore
     List<ServiceProvider> serviceProviderList=new ArrayList<>();
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
-    @JoinColumn
     private Country country;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)

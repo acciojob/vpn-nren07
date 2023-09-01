@@ -16,12 +16,10 @@ public class User {
     private String maskedIp;
     private Boolean connected;
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    @ManyToMany
+
     @JoinColumn
+    @ManyToMany
     List<ServiceProvider> serviceProviderList=new ArrayList<>();
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
@@ -31,6 +29,9 @@ public class User {
     List<Connection>connectionList=new ArrayList<>();
 
     public User() {
+    }
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Integer getId() {

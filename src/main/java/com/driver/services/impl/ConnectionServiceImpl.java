@@ -20,7 +20,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     ConnectionRepository connectionRepository2;
 
     @Override
-    public User connect(int userId, String countryName) throws Exception {
+    public User  connect(int userId, String countryName) throws Exception {
         if(!userRepository2.existsById(userId)) throw new Exception("User is not found");
         User user = userRepository2.findById(userId).get();
         if (user.getConnected()) throw new Exception("Already connected");
@@ -34,7 +34,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
         List<ServiceProvider> serviceProviders = user.getServiceProviderList();
         ServiceProvider serviceProviderWIthLowestId = null;
-        Integer lowestId = -1;
+        Integer lowestId = null ;
 
         for (ServiceProvider provider : serviceProviders) {
             for (Country country : provider.getCountryList()) {
@@ -68,7 +68,6 @@ public class ConnectionServiceImpl implements ConnectionService {
 
         userRepository2.save(user);
         serviceProviderRepository2.save(serviceProviderWIthLowestId);
-        connectionRepository2.save(connection);
 
         return user;
 

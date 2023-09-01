@@ -40,15 +40,14 @@ public class AdminServiceImpl implements AdminService{
     public Admin addServiceProvider(int adminId, String providerName) throws Exception {
         if(!adminRepository1.existsById(adminId)) throw new Exception("admin is not valid");
         Admin admin=adminRepository1.findById(adminId).get();
+        List<ServiceProvider> list=admin.getServiceProviders();
+
         ServiceProvider serviceProvider=new ServiceProvider();
         serviceProvider.setName(providerName);
         //set fk valiables
-        List<ServiceProvider> list=admin.getServiceProviders();
+        serviceProvider.setAdmin(admin);
         list.add(serviceProvider);
         admin.setServiceProviders(list);
-
-        serviceProvider.setAdmin(admin);
-
         //bidirectional mapping
         return adminRepository1.save(admin);
     }

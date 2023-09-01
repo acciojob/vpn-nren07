@@ -39,10 +39,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User subscribe(Integer userId, Integer serviceProviderId) throws Exception {
-//        if(!userRepository3.existsById(userId)) throw new Exception("user not found");
-//        if(!serviceProviderRepository3.existsById(serviceProviderId)) throw new Exception("serviceProvider is invalid");
+        if(!userRepository3.existsById(userId)) throw new Exception("user not found");
+        if(!serviceProviderRepository3.existsById(serviceProviderId)) throw new Exception("serviceProvider is invalid");
         //all validation check
-        //connect fk
+
         User user=userRepository3.findById(userId).get();
         ServiceProvider serviceProvider=serviceProviderRepository3.findById(serviceProviderId).get();
 
@@ -53,8 +53,6 @@ public class UserServiceImpl implements UserService {
         userList.add(user);
         //fk set
         user.setServiceProviderList(serviceProviderList); // user fk set
-
-
 
         //bidirectional mapping
         serviceProviderRepository3.save(serviceProvider);

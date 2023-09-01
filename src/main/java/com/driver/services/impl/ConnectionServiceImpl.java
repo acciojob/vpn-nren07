@@ -46,10 +46,7 @@ public class ConnectionServiceImpl implements ConnectionService {
                 }
             }
         }
-        //         where the maskedIp is "updatedCountryCode.serviceProviderId.userId"
-        //         and return the updated user. If multiple service providers
-        //        allow you to connect to the country, use the service provider having smallest id.
-        if(lowestId==-1) throw new Exception("Unable to connect");
+        if(lowestId==Integer.MAX_VALUE) throw new Exception("Unable to connect");
         ServiceProvider serviceProviderWIthLowestId=serviceProviderRepository2.findById(lowestId).get();
 
         Connection connection = new Connection();
@@ -77,7 +74,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     public User disconnect(int userId) throws Exception{ //
 
-//        if(!userRepository2.existsById(userId)) throw new Exception("user is not present in DB");
+        if(!userRepository2.existsById(userId)) throw new Exception("user is not present in DB");
 
         User user =userRepository2.findById(userId).get();
 
@@ -92,14 +89,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     public User communicate(int senderId, int receiverId) throws Exception{
 
-        //Establish a connection between sender and receiver users
-        //To communicate to the receiver, sender should be in the current country of the receiver.
-        //If the receiver is connected to a vpn, his current country is the one he is connected to.
-        //If the receiver is not connected to vpn, his current country is his original country.
-        //The sender is initially not connected to any vpn. If the sender's original country does not match receiver's current country, we need to connect the sender to a suitable vpn. If there are multiple options, connect using the service provider having smallest id
-        //If the sender's original country matches receiver's current country, we do not need to do anything as they can communicate. Return the sender as it is.
-        //If communication can not be established due to any reason, throw "Cannot establish communication" exception
-//        if(!userRepository2.existsById(senderId) || !userRepository2.existsById(receiverId)) throw new Exception("given id not present in db");
+        if(!userRepository2.existsById(senderId) || !userRepository2.existsById(receiverId)) throw new Exception("given id not present in db");
         User receiver = userRepository2.findById(receiverId).get();
         CountryName receiverCountryName = null;
 
@@ -123,6 +113,4 @@ public class ConnectionServiceImpl implements ConnectionService {
         }
         return user;
     }
-
-
 }

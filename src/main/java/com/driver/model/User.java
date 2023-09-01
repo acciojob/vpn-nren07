@@ -14,7 +14,7 @@ public class User {
     private String password;
     private String originalIp;
     private String maskedIp;
-    private boolean connected=false;
+    private boolean connected;
 
     public void setId(int id) {
         this.id = id;

@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         user.setOriginalCountry(country);
 
         user=userRepository3.save(user); //this is for user id assign
-        user.setOriginalIp(new String(user.getOriginalCountry().getCode()+user.getId()));
+        user.setOriginalIp(new String(user.getOriginalCountry().getCode()+"."+user.getId()));
 
         //bidirectional mapping here
         userRepository3.save(user);
@@ -50,14 +50,20 @@ public class UserServiceImpl implements UserService {
         List<ServiceProvider>serviceProviderList=user.getServiceProviderList();
         List<User>userList=serviceProvider.getUsers();
         //fk set
-        serviceProviderList.add(serviceProvider);
-        user.setServiceProviderList(serviceProviderList);
 
-        userList.add(user);
-        serviceProvider.setUsers(userList);
+
+
 
         //bidirectional mapping
+        serviceProvider=serviceProviderRepository3.save(serviceProvider);
+        serviceProviderList.add(serviceProvider);
+        user.setServiceProviderList(serviceProviderList); // user fk set
+
+        userList.add(user);
+        serviceProvider.setUsers(userList); //service provider fk set
+        userRepository3.save(user);
         serviceProviderRepository3.save(serviceProvider);
+
         return user;
     }
 }

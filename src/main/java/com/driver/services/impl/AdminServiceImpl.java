@@ -38,7 +38,7 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public Admin addServiceProvider(int adminId, String providerName) throws Exception {
-        if(!adminRepository1.existsById(adminId)) throw new Exception("admin is not valid");
+//        if(!adminRepository1.existsById(adminId)) throw new Exception("admin is not valid");
         Admin admin=adminRepository1.findById(adminId).get();
         List<ServiceProvider> list=admin.getServiceProviders();
 
@@ -57,7 +57,7 @@ public class AdminServiceImpl implements AdminService{
 //        add a country under the serviceProvider and return respective service provider
 //        country name would be a 3-character string out of ind, aus, usa, chi, jpn. Each character can be in uppercase or lowercase. You should create a new Country object based on the given country name and add it to the country list of the service provider. Note that the user attribute of the country in this case would be null.
 //        In case country name is not amongst the above mentioned strings, throw "Country not found" exception
-        if(!serviceProviderRepository1.existsById(serviceProviderId)) throw new Exception("Service provider not in Db");
+//        if(!serviceProviderRepository1.existsById(serviceProviderId)) throw new Exception("Service provider not in Db");
         ServiceProvider serviceProvider=serviceProviderRepository1.findById(serviceProviderId).get();
         List<Country>list=serviceProvider.getCountryList();
         Country country=new Country();

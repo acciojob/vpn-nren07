@@ -21,7 +21,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
     @Override
     public User  connect(int userId, String countryName) throws Exception {
-        if(!userRepository2.existsById(userId)) throw new Exception("User is not found");
+//        if(!userRepository2.existsById(userId)) throw new Exception("User is not found");
         User user = userRepository2.findById(userId).get();
         if (user.getConnected()) throw new Exception("Already connected");
 
@@ -75,7 +75,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     public User disconnect(int userId) throws Exception{ //
 
-        if(!userRepository2.existsById(userId)) throw new Exception("user is not present in DB");
+//        if(!userRepository2.existsById(userId)) throw new Exception("user is not present in DB");
 
         User user =userRepository2.findById(userId).get();
 
@@ -97,7 +97,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         //The sender is initially not connected to any vpn. If the sender's original country does not match receiver's current country, we need to connect the sender to a suitable vpn. If there are multiple options, connect using the service provider having smallest id
         //If the sender's original country matches receiver's current country, we do not need to do anything as they can communicate. Return the sender as it is.
         //If communication can not be established due to any reason, throw "Cannot establish communication" exception
-        if(!userRepository2.existsById(senderId) || !userRepository2.existsById(receiverId)) throw new Exception("given id not present in db");
+//        if(!userRepository2.existsById(senderId) || !userRepository2.existsById(receiverId)) throw new Exception("given id not present in db");
         User receiver = userRepository2.findById(receiverId).get();
         CountryName receiverCountryName = null;
 

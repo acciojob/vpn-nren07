@@ -21,34 +21,36 @@ public class ConnectionServiceImpl implements ConnectionService {
 
     @Override
     public User  connect(int userId, String countryName) throws Exception {
-//        if(!userRepository2.existsById(userId)) throw new Exception("User is not found");
+        if(!userRepository2.existsById(userId)) throw new Exception("User is not found");
         User user = userRepository2.findById(userId).get();
         if (user.getConnected()) throw new Exception("Already connected");
 
         Country givenCountry = new Country();
-        givenCountry.enrich(countryName);
+        try{
+            givenCountry.enrich(countryName);
+        }catch(Exception e){
+            throw new Exception("country  me jhol h re baaba");
+        }
 
         if (user.getOriginalCountry().getCountryName().equals(givenCountry.getCountryName())) {
             return user;
         }
 
         List<ServiceProvider> serviceProviders = user.getServiceProviderList();
-        ServiceProvider serviceProviderWIthLowestId = null;
-        Integer lowestId = null ;
+        Integer lowestId = Integer.MAX_VALUE ;
 
         for (ServiceProvider provider : serviceProviders) {
             for (Country country : provider.getCountryList()) {
                 if (country.getCode().equals(givenCountry.getCode()) || lowestId > provider.getId()) {
-                    serviceProviderWIthLowestId = provider;
-                    lowestId = serviceProviderWIthLowestId.getId();
+                    lowestId = provider.getId();
                 }
             }
         }
         //         where the maskedIp is "updatedCountryCode.serviceProviderId.userId"
         //         and return the updated user. If multiple service providers
         //        allow you to connect to the country, use the service provider having smallest id.
-
-        if (serviceProviderWIthLowestId == null) throw new Exception("Unable to connect");
+        if(lowestId==-1) throw new Exception("Unable to connect");
+        ServiceProvider serviceProviderWIthLowestId=serviceProviderRepository2.findById(lowestId).get();
 
         Connection connection = new Connection();
         connection.setUser(user);

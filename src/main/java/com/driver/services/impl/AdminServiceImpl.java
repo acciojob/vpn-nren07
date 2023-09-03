@@ -46,7 +46,7 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public ServiceProvider addCountry(int serviceProviderId, String countryName) throws Exception {
-        if(!serviceProviderRepository1.existsById(serviceProviderId)) throw new Exception("service provider id is not present in db");
+        if(!serviceProviderRepository1.existsById(serviceProviderId)) throw new Exception("Country not found");
         ServiceProvider serviceProvider=serviceProviderRepository1.findById(serviceProviderId).get();
         Country country=new Country();
         country.enrich(countryName);

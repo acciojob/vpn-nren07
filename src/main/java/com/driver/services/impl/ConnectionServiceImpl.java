@@ -21,6 +21,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
     @Override
     public User  connect(int userId, String countryName) throws Exception {
+        if(!userRepository2.existsById(userId)) throw new Exception("User id is not present in db");
         User user = userRepository2.findById(userId).get();
         if (user.getConnected()) throw new Exception("Already connected");
 
@@ -64,7 +65,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     }
     @Override
     public User disconnect(int userId) throws Exception{
-
+        if(!userRepository2.existsById(userId)) throw new Exception("User id is not present in db");
         User user =userRepository2.findById(userId).get();
 
         if(!user.getConnected()){
@@ -78,7 +79,6 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     public User communicate(int senderId, int receiverId) throws Exception{
 
-        if(!userRepository2.existsById(senderId) || !userRepository2.existsById(receiverId)) throw new Exception("given id not present in db");
         User receiver = userRepository2.findById(receiverId).get();
         CountryName receiverCountryName = null;
 

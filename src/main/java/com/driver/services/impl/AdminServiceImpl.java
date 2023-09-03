@@ -32,6 +32,7 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public Admin addServiceProvider(int adminId, String providerName) throws Exception {
+        if(!adminRepository1.existsById(adminId)) throw new Exception("admin not present in db");
         Admin admin=adminRepository1.findById(adminId).get();
         ServiceProvider serviceProvider=new ServiceProvider();
 
@@ -46,7 +47,7 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public ServiceProvider addCountry(int serviceProviderId, String countryName) throws Exception {
-
+        if(!serviceProviderRepository1.existsById(serviceProviderId)) throw new Exception("service provider id is not present in db");
         ServiceProvider serviceProvider=serviceProviderRepository1.findById(serviceProviderId).get();
         Country country=new Country();
         country.enrich(countryName);

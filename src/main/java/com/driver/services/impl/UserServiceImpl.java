@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
         try{
             country.enrich(countryName);
         }catch(Exception e){
-            throw new Exception("country name is invalid or not present");
+            throw new Exception("Country not found");
         }
         //set fk variable
         country.setUser(user);

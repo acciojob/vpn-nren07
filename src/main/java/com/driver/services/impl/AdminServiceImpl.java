@@ -31,8 +31,7 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public Admin addServiceProvider(int adminId, String providerName) throws Exception {
-        if(!adminRepository1.existsById(adminId)) throw new Exception("admin not present in db");
+    public Admin addServiceProvider(int adminId, String providerName) {
         Admin admin=adminRepository1.findById(adminId).get();
         ServiceProvider serviceProvider=new ServiceProvider();
 

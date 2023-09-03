@@ -26,7 +26,11 @@ public class ConnectionServiceImpl implements ConnectionService {
         if (user.getConnected()) throw new Exception("Already connected");
 
         Country givenCountry = new Country();
-        givenCountry.enrich(countryName);
+        try{
+            givenCountry.enrich(countryName);
+        }catch(Exception e){
+            throw new Exception(e.getMessage());
+        }
 
         if (user.getOriginalCountry().getCountryName().equals(givenCountry.getCountryName())) {
             return user;
@@ -78,7 +82,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     }
     @Override
     public User communicate(int senderId, int receiverId) throws Exception{
-
+        if(!userRepository2.existsById(receiverId)) throw new Exception("receiver not found");
         User receiver = userRepository2.findById(receiverId).get();
         CountryName receiverCountryName = null;
 

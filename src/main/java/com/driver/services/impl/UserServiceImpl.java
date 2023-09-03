@@ -25,7 +25,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(password);
         user.setConnected(false);
         Country country=new Country();
-        country.enrich(countryName);
+        try{
+            country.enrich(countryName);
+        }catch(Exception e){
+            throw new Exception("country name is invalid or not present");
+        }
         //set fk variable
         country.setUser(user);
         user.setOriginalCountry(country);

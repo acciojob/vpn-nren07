@@ -21,16 +21,11 @@ public class ConnectionServiceImpl implements ConnectionService {
 
     @Override
     public User  connect(int userId, String countryName) throws Exception {
-        if(!userRepository2.existsById(userId)) throw new Exception("User is not found");
         User user = userRepository2.findById(userId).get();
         if (user.getConnected()) throw new Exception("Already connected");
 
         Country givenCountry = new Country();
-        try{
-            givenCountry.enrich(countryName);
-        }catch(Exception e){
-            throw new Exception("country  me jhol h re baaba");
-        }
+        givenCountry.enrich(countryName);
 
         if (user.getOriginalCountry().getCountryName().equals(givenCountry.getCountryName())) {
             return user;
@@ -54,16 +49,12 @@ public class ConnectionServiceImpl implements ConnectionService {
         user.setConnected(true);
 
         //fk set
-        List<Connection> connections = user.getConnectionList();
-        connections.add(connection);
-        user.setConnectionList(connections);
+        user.getConnectionList().add(connection);
 
         user.setMaskedIp(new String(givenCountry.getCode() + "." + serviceProviderWIthLowestId.getId() + "." + user.getId()));
         connection.setServiceProvider(serviceProviderWIthLowestId);
 
-        List<Connection> connectionList = serviceProviderWIthLowestId.getConnectionList();
-        connectionList.add(connection);
-        serviceProviderWIthLowestId.setConnectionList(connectionList);
+        serviceProviderWIthLowestId.getConnectionList().add(connection);
 
         userRepository2.save(user);
         serviceProviderRepository2.save(serviceProviderWIthLowestId);
@@ -72,9 +63,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
     }
     @Override
-    public User disconnect(int userId) throws Exception{ //
-
-        if(!userRepository2.existsById(userId)) throw new Exception("user is not present in DB");
+    public User disconnect(int userId) throws Exception{
 
         User user =userRepository2.findById(userId).get();
 

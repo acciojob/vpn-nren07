@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table
-
+@Table(name="Admin")
 public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +21,6 @@ public class Admin {
     public Admin() {
     }
 
-    public Admin( String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
     public Admin(int id, String username, String password, List<ServiceProvider> serviceProviders) {
         this.id = id;
         this.username = username;
@@ -34,11 +28,11 @@ public class Admin {
         this.serviceProviders = serviceProviders;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
